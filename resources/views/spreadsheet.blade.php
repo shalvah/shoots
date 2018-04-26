@@ -44,3 +44,21 @@
     });
 </script>
 
+<script src="https://js.pusher.com/4.2/pusher.min.js"></script>
+<script>
+    let pusher = new Pusher('your-app-key', {
+        cluster: 'your-app-cluster',
+        authEndpoint: '/sheets/{{ $sheet->_id }}/subscription_auth',
+        auth: {
+            headers: {
+                'X-CSRF-Token': csrfToken
+            }
+        }
+    });
+    pusher.subscribe("{{ $sheet->channel_name }}")
+        .bind('updated', function (message) {
+            let [rowIndex, columnIndex, oldValue, newValue] = message.change;
+            sheetContent[rowIndex][columnIndex] = newValue;
+            table.loadData(sheetContent)
+    });
+</script>
