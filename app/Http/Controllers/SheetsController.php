@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Sheet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Pusher\Laravel\Facades\Pusher;
 
 class SheetsController extends Controller
 {
@@ -32,7 +33,16 @@ class SheetsController extends Controller
 
     public function update($id)
     {
-        $sheet = Sheet::where('_id', $id)->update(['content' => \request('content') ?: [[]]]);
+        $sheet = Sheet::findOrFail($id);
+        $change = \request('change');
+        [$rowIndex, $columnIndex, $oldValue, $newValue] = $change;
+
+        $sheetContent = $sheet->content;
+        $sheetContent[$rowIndex][$columnIndex] = $change;
+        $sheet->content = $sheetContent;
+        $sheet->save();
+        Pusher::trigger($sheet->channel_name, 'updated', ['change' => $change]);
         return response()->json(['sheet' => $sheet]);
     }
+
 }
