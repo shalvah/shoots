@@ -1,8 +1,11 @@
 # shoots
 Realtime spreadsheets app similar to Google Sheets.
 
+## Description
+The app supports realtime spreadsheet editing by multiple users
+
 ## Prerequisites
-- PHP >= 7.1.3
+- PHP >= 7.2
 - Composer
 - MongoDB 3.4 or greater
 - A [Pusher account](https://pusher.com/signup) and [Pusher app credentials](http://dashboard.pusher.com/)
@@ -25,11 +28,13 @@ PUSHER_APP_CLUSTER=your-app-cluster
 
 Look for these lines of JavaScript in `resources/views/spreadsheet.blade.php`:
 ```javascript
-var pusher = new Pusher('your-app-key', {
+let pusher = new Pusher('your-app-key', {
     cluster: 'your-app-cluster'
 });
 ```
 Insert your Pusher app key and cluster in the appropriate places.
+
+If your MongoDB server requires a username and password, add those in your `.env` file as the `DB_USERNAME` and `DB_PASSWORD` respectively.
 
 Then:
 
