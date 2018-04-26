@@ -38,11 +38,21 @@ class SheetsController extends Controller
         [$rowIndex, $columnIndex, $oldValue, $newValue] = $change;
 
         $sheetContent = $sheet->content;
-        $sheetContent[$rowIndex][$columnIndex] = $change;
+        $sheetContent[$rowIndex][$columnIndex] = $newValue;
         $sheet->content = $sheetContent;
         $sheet->save();
         Pusher::trigger($sheet->channel_name, 'updated', ['change' => $change]);
         return response()->json(['sheet' => $sheet]);
     }
 
+    public function authenticateForSubscription($id)
+    {
+        $authSignature = Pusher::presence_auth(
+            \request('channel_name'),
+            \request('socket_id'),
+            \Auth::user()->_id,
+            \Auth::user()->toArray()
+        );
+        return response()->json(json_decode($authSignature));
+    }
 }

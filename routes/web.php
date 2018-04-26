@@ -22,3 +22,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('sheets/new', 'SheetsController@newSheet')->name('sheets.new');
 Route::get('sheets/{sheet}', 'SheetsController@view')->name('sheets.view');
 Route::put('sheets/{id}', 'SheetsController@update');
+Route::post('sheets/{id}/subscription_auth', 'SheetsController@authenticateForSubscription');
