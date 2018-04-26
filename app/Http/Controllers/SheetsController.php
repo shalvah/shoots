@@ -16,19 +16,17 @@ class SheetsController extends Controller
 
     public function newSheet()
     {
-        $user = Auth::user();
         $sheet = Sheet::create([
             'name' => 'Untitled spreadsheet',
-            '_users' => [],
-            '_owner' => $user->_id,
+            '_owner' => Auth::user()->_id,
             'content' => [[]]
         ]);
-        $user->push('viewed_sheets', $sheet->_id);
         return redirect(route('sheets.view', ['sheet' => $sheet]));
     }
 
     public function view(Sheet $sheet)
     {
+        Auth::user()->push('viewed_sheets', $sheet->_id);
         return view('spreadsheet', ['sheet' => $sheet]);
     }
 
