@@ -37,12 +37,23 @@ class SheetsController extends Controller
         $change = \request('change');
         [$rowIndex, $columnIndex, $oldValue, $newValue] = $change;
 
-        $sheetContent = $sheet->content;
-        $sheetContent[$rowIndex][$columnIndex] = $newValue;
-        $sheet->content = $sheetContent;
+        $sheet->content = $this->updateCell($rowIndex, $columnIndex, $newValue, $sheet->content);
         $sheet->save();
         Pusher::trigger($sheet->channel_name, 'updated', ['change' => $change]);
         return response()->json(['sheet' => $sheet]);
+    }
+
+    protected function updateCell($rowIndex, $columnIndex, $newValue, $sheetContent)
+    {
+        // we expand the sheet to reach the farthest cell
+        for ($row = 0; $row <= $rowIndex; $row++) {
+            if (!isset($sheetContent[$row])) $sheetContent[$row] = [];
+            for ($column = 0; $column <= $columnIndex; $column++) {
+                if (!isset($sheetContent[$row][$column])) $sheetContent[$row][$column] = null;
+                }
+        }
+        $sheetContent[$rowIndex][$columnIndex] = $newValue;
+        return $sheetContent;
     }
 
     public function authenticateForSubscription($id)

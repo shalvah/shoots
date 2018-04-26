@@ -33,7 +33,7 @@
 
             fetch('/sheets/{{ $sheet->_id }}', {
                 method: 'PUT',
-                body: JSON.stringify({ change: change[0] }),
+                body: JSON.stringify({change: change[0]}),
                 headers: {
                     'X-CSRF-TOKEN': csrfToken,
                     'Content-Type': 'application/json'
@@ -57,8 +57,20 @@
     });
     pusher.subscribe("{{ $sheet->channel_name }}")
         .bind('updated', function (message) {
+            console.log(message)
             let [rowIndex, columnIndex, oldValue, newValue] = message.change;
-            sheetContent[rowIndex][columnIndex] = newValue;
-            table.loadData(sheetContent)
-    });
+            addCellValue(rowIndex, columnIndex, newValue);
+            table.loadData(sheetContent);
+        });
+
+    function addCellValue(rowIndex, columnIndex, newValue) {
+        // we expand the sheet to reach the farthest cell
+        for (let row = 0; row <= rowIndex; row++) {
+            if (!sheetContent[row]) sheetContent[row] = [];
+            for (let column = 0; column <= columnIndex; column++) {
+                if (!sheetContent[row][column]) sheetContent[row][column] = null;
+            }
+        }
+        sheetContent[rowIndex][columnIndex] = newValue;
+    }
 </script>
