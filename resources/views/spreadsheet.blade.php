@@ -16,11 +16,12 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handsontable/2.0.0/handsontable.min.js"></script>
 <script>
-    let data = @json($sheet->content);
+    let csrfToken = document.head.querySelector('meta[name="csrf-token"]').content;
+    let sheetContent = @json($sheet->content);
 
     let container = document.getElementById('sheet');
     let table = new Handsontable(container, {
-        data: data,
+        data: sheetContent,
         rowHeaders: true,
         colHeaders: true,
         minCols: 20,
@@ -32,9 +33,9 @@
 
             fetch('/sheets/{{ $sheet->_id }}', {
                 method: 'PUT',
-                body: JSON.stringify({content: data}),
+                body: JSON.stringify({ change: change[0] }),
                 headers: {
-                    'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content,
+                    'X-CSRF-TOKEN': csrfToken,
                     'Content-Type': 'application/json'
                 },
                 credentials: 'same-origin'
@@ -42,3 +43,4 @@
         }
     });
 </script>
+
