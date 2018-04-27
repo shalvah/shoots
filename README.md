@@ -2,7 +2,8 @@
 Realtime spreadsheets app similar to Google Sheets.
 
 ## Description
-The app supports realtime spreadsheet editing by multiple users
+- Realtime spreadsheet editing by multiple users
+- "Who's viewing" the sheet, updated in realtime 
 
 ## Prerequisites
 - PHP >= 7.2
