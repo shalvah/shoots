@@ -1,6 +1,8 @@
 # shoots
 Realtime spreadsheets app similar to Google Sheets.
 
+View the tutorial: [Part 1](https://pusher.com/tutorials/realtime-spreadsheets-part-1) [Part 2](https://pusher.com/tutorials/realtime-spreadsheets-part-2) [Part 3](https://pusher.com/tutorials/realtime-spreadsheets-part-3) [Part 4](https://pusher.com/tutorials/realtime-spreadsheets-part-4)
+
 ## Description
 - Realtime spreadsheet editing by multiple users
 - "Who's viewing" the sheet, updated in realtime 
